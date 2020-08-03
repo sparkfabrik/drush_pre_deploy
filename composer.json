@@ -1,0 +1,25 @@
+{
+    "name": "sparkfabrik/drush-pre-deploy",
+    "description": "drush integration that enables \"pre-deploy\" hooks.",
+    "type": "drupal-drush",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "keywords": ["drush", "drupal"],
+    "homepage": "https://github.com/sparkfabrik/drush-pre-deploy",
+    "authors": [
+      {
+        "name": "Marco Primitivo",
+        "homepage": "https://www.drupal.org/u/bladedu",
+        "role": "Maintainer"
+      },
+      {
+        "name": "Giuseppe Rota",
+        "homepage": "https://www.drupal.org/u/grota",
+        "role": "Maintainer"
+      }
+    ],
+    "require": {},
+    "conflict": {
+      "drush/drush": "<10.3.0"
+    }
+}
