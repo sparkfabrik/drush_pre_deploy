@@ -6,6 +6,7 @@
     "prefer-stable": true,
     "keywords": ["drush", "drupal"],
     "homepage": "https://github.com/sparkfabrik/drush-pre-deploy",
+    "license": "GPL-2.0-or-later",
     "authors": [
       {
         "name": "Marco Primitivo",
