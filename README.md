@@ -28,7 +28,7 @@ function foo_predeploy_some_text_here(&$sandbox) {
 }
 ```
 
-Additionally this project provides the `deploy:pre-hook` and `deploy:pre-hook-status` commands which are similar to the [deploy:hook](https://www.drush.org/commands/10.x/deploy_hook/) and [deploy:hook-status](https://www.drush.org/commands/10.x/deploy_hook-status/) commands. The first runs pending "pre-deply" hooks and the second prints information about pending "pre-deploy" update hooks.
+Additionally this project provides the `deploy:pre-hook` and `deploy:pre-hook-status` commands which are similar to the [deploy:hook](https://www.drush.org/commands/10.x/deploy_hook/) and [deploy:hook-status](https://www.drush.org/commands/10.x/deploy_hook-status/) commands. The first runs pending "pre-deploy" hooks and the second prints information about pending "pre-deploy" update hooks.
 
 # Installation
 
@@ -39,4 +39,4 @@ This project requires drush at least at version 10.3.0.
 There are some additional manual install steps while some upstream packages like [Composer-installers](https://github.com/composer/installers)) adapt to Drush 10:
 
 * In your project's main composer.json, change the 'type:drupal-drush' installer-path from `drush/contrib/{$name}` to `drush/Commands/{$name}`.
-* If your repository incldues a legacy `drush/contrib` folder, rename it to `drush/Commands`.
+* If your repository includes a legacy `drush/contrib` folder, rename it to `drush/Commands`.

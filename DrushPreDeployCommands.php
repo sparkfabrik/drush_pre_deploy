@@ -3,8 +3,6 @@
 namespace Drush\Commands\drush_pre_deploy;
 
 use Consolidation\Log\ConsoleLogLevel;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drupal\Core\Update\UpdateRegistry;
 use Drupal\Core\Utility\Error;
 use Drush\Drupal\Commands\core\DeployHookCommands;
@@ -12,7 +10,6 @@ use Drush\Exceptions\UserAbortException;
 use Psr\Log\LogLevel;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
-use Drush\Drush;
 
 /**
  * Pre-deploy drush command class.
@@ -26,7 +23,8 @@ class DrushPreDeployCommands extends DeployHookCommands implements SiteAliasMana
    *
    * Override the construct to be able to receive 0 params like a sitewide
    * drush command expects.
-   * The `init()` function is later called in each command to initialize the members.
+   * The `init()` function is later called in each command to initialize the
+   * members.
    * This is a technical limitation due to the fact that sitewide drush command
    * cannot use a drush.services.yml file.
    */
@@ -46,6 +44,7 @@ class DrushPreDeployCommands extends DeployHookCommands implements SiteAliasMana
    * @default-fields module,hook,description
    *
    * @command deploy:pre-hook-status
+   * @bootstrap full
    *
    * @filter-default-field hook
    *
@@ -66,6 +65,7 @@ class DrushPreDeployCommands extends DeployHookCommands implements SiteAliasMana
    *   Runs pending pre-deploy hooks.
    *
    * @command deploy:pre-hook
+   * @bootstrap full
    *
    * @return int
    *   0 for success, 1 for failure.
