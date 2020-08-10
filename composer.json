@@ -23,5 +23,8 @@
       "php": ">=5.4.0"
     },
     "conflict": {
+    },
+    "require-dev": {
+        "drupal/coder": "^8"
     }
 }

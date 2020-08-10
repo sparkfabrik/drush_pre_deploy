@@ -19,7 +19,11 @@ function onetimefunctions_drush_command() {
     'outputformat' => [
       'default' => 'table',
       'pipe-format' => 'csv',
-      'field-labels' => ['module' => 'Module', 'number' => 'Predeploy ID', 'description' => 'Description'],
+      'field-labels' => [
+        'module' => 'Module',
+        'number' => 'Predeploy ID',
+        'description' => 'Description',
+      ],
       'fields-default' => ['module', 'number', 'description'],
       'output-data-type' => 'format-table',
     ],
@@ -32,7 +36,6 @@ function onetimefunctions_drush_command() {
   ];
   return $items;
 }
-
 
 /**
  * Implements hook_drush_help().

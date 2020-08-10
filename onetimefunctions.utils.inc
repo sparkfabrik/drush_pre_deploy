@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file
+ * Onetime functions drush commands for d7.
+ */
+
 use Drush\Log\LogLevel;
 
+/**
+ * Gets the last executed onetime func for each installed module.
+ */
 function drush_get_last_executed_onetime_functions($type = 'predeploy') {
   $last_executed = variable_get('drush_deploy_last_executed_' . $type, []);
   $toreturn = [];
@@ -11,6 +19,9 @@ function drush_get_last_executed_onetime_functions($type = 'predeploy') {
   return $toreturn;
 }
 
+/**
+ * Sets the last executed onetime func for a module.
+ */
 function drush_set_last_executed_onetime_function($module, $number, $type = 'predeploy') {
   $last_executed = variable_get('drush_deploy_last_executed_' . $type, []);
   $last_executed[$module] = $number;
@@ -85,6 +96,9 @@ function drush_get_pending_onetime_functions($type = 'predeploy') {
   return $ret;
 }
 
+/**
+ * Get the onetime function name.
+ */
 function drush_get_onetime_function_name($module, $type, $number) {
   return $module . '_' . $type . '_' . $number;
 }
@@ -101,13 +115,17 @@ function drush_d7_onetime_functions_status($type = 'predeploy') {
   $start = [];
   // Print a list of pending onetime funcs for this module and get confirmation.
   foreach ($pending as $module => $onetime_funcs) {
-    if (!isset($onetime_funcs['start']))  {
+    if (!isset($onetime_funcs['start'])) {
       continue;
     }
     foreach ($onetime_funcs['pending'] as $number => $description) {
       // Strip cruft from front.
       $description = str_replace($number . ' -   ', '', $description);
-      $return[] = ['module' => ucfirst($module), 'number' => $number, 'description' => $description];
+      $return[] = [
+        'module' => ucfirst($module),
+        'number' => $number,
+        'description' => $description,
+      ];
     }
     $start[$module] = $onetime_funcs['start'];
   }
@@ -130,7 +148,6 @@ function drush_include_onetime_functions_files($type = 'predeploy') {
  */
 function drush_d7_onetime_functions_execute($type = 'predeploy') {
   // Looks like calling update_main_prepare is not necessary here.
-
   list($pending, $start) = drush_d7_onetime_functions_status();
   if ($pending) {
     drush_print_table($pending);
@@ -153,7 +170,7 @@ function drush_d7_onetime_functions_execute($type = 'predeploy') {
  * drush_get_pending_onetime_functions to an input valid for
  * drush_onetime_functions_update_build_dependency_graph.
  *
- * @param $pending
+ * @param array $pending
  *   An array as returned from drush_get_pending_onetime_functions.
  *   Example:
  *   $pending = [
@@ -171,11 +188,11 @@ function drush_d7_onetime_functions_execute($type = 'predeploy') {
  *       ],
  *       'start' => '0001',
  *     ],
- *   ];
- * @param $type
+ *   ];.
+ * @param string $type
  *   The onetime func type.
  *
- * @return
+ * @return array
  *   An array that can be passed as input to
  *   drush_onetime_functions_update_build_dependency_graph.
  *   Example:
@@ -185,7 +202,7 @@ function drush_d7_onetime_functions_execute($type = 'predeploy') {
  *     ],
  *   ]
  */
-function drush_transform_pending_onetime_functions_to_input_for_dependency($pending, $type = 'predeploy') {
+function drush_transform_pending_onetime_functions_to_input_for_dependency(array $pending, $type = 'predeploy') {
   $toreturn = [];
   foreach ($pending as $module => $struct) {
     foreach (array_keys($struct['pending'] ?? []) as $number) {
@@ -230,7 +247,8 @@ function drush_onetime_functions_update_resolve_dependencies($pending, $type = '
 }
 
 /**
- * Onetime function specific update_build_dependency_graph
+ * Onetime function specific update_build_dependency_graph.
+ *
  * Does not call update_retrieve_dependencies.
  *
  * @see update_build_dependency_graph
@@ -281,7 +299,10 @@ function drush_onetime_functions_execute_batch($type = 'predeploy') {
     $module = $update['module'];
     $number = $update['number'];
     $function = drush_get_onetime_function_name($module, $type, $number);
-    $operations[] = ['drush_onetime_func_do_one', [$module, $number, $dependency_map[$function], $type]];
+    $operations[] = [
+      'drush_onetime_func_do_one',
+      [$module, $number, $dependency_map[$function], $type],
+    ];
   }
   $batch['operations'] = $operations;
   $batch += [
