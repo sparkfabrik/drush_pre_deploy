@@ -19,8 +19,9 @@
         "role": "Maintainer"
       }
     ],
-    "require": {},
+    "require": {
+      "php": ">=5.4.0"
+    },
     "conflict": {
-      "drush/drush": "<10.3.0"
     }
 }
