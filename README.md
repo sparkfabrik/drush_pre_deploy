@@ -5,4 +5,6 @@ These two commands are meant to be called in your D7 deploy procedure (along wit
 
 # Installation
 
-`composer require sparkfabrik/drush-pre-deploy:dev-7.x`
+`composer require sparkfabrik/drush-pre-deploy:7.x-dev`
+
+Make sure you have `"minimum-stability": "dev"`
