@@ -13,27 +13,34 @@ require_once __DIR__ . '/onetimefunctions.utils.inc';
  * Implements hook_drush_command().
  */
 function onetimefunctions_drush_command() {
-  $items['pre-hook-status'] = [
-    'description' => "Prints information about pending pre-deploy update hooks.",
-    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
-    'outputformat' => [
-      'default' => 'table',
-      'pipe-format' => 'csv',
-      'field-labels' => [
-        'module' => 'Module',
-        'number' => 'Predeploy ID',
-        'description' => 'Description',
+  $types = ['predeploy', 'postdeploy'];
+  foreach ($types as $type) {
+    $items["$type-status"] = [
+      'description' => "Prints information about pending $type update hooks.",
+      'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
+      'callback' => 'drush_onetimefunctions_status',
+      'callback arguments' => [$type],
+      'outputformat' => [
+        'default' => 'table',
+        'pipe-format' => 'csv',
+        'field-labels' => [
+          'module' => 'Module',
+          'number' => ucfirst($type) . ' ID',
+          'description' => 'Description',
+        ],
+        'fields-default' => ['module', 'number', 'description'],
+        'output-data-type' => 'format-table',
       ],
-      'fields-default' => ['module', 'number', 'description'],
-      'output-data-type' => 'format-table',
-    ],
-    'aliases' => ['deploy:pre-hook-status'],
-  ];
-  $items['pre-hook'] = [
-    'description' => "Runs pre-deploy hooks.",
-    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
-    'aliases' => ['deploy:pre-hook'],
-  ];
+      'aliases' => ["deploy:$type-status"],
+    ];
+    $items[$type] = [
+      'description' => "Runs $type hooks.",
+      'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
+      'callback' => 'drush_onetimefunctions_execute',
+      'callback arguments' => [$type],
+      'aliases' => ["deploy:$type"],
+    ];
+  }
   return $items;
 }
 
@@ -53,9 +60,8 @@ function onetimefunctions_drush_help($section) {
  *
  * @see drush_core_updatedb_status
  */
-function drush_onetimefunctions_pre_hook_status() {
+function drush_onetimefunctions_status($type) {
   require_once DRUSH_DRUPAL_CORE . '/includes/install.inc';
-  $type = 'predeploy';
   list($pending, $start) = drush_d7_onetime_functions_status($type);
   if (empty($pending)) {
     drush_log(dt("No @type required.", ['@type' => $type]), LogLevel::OK);
@@ -68,8 +74,7 @@ function drush_onetimefunctions_pre_hook_status() {
  *
  * @see drush_core_updatedb
  */
-function drush_onetimefunctions_pre_hook() {
-  $type = 'predeploy';
+function drush_onetimefunctions_execute($type) {
   $result = drush_d7_onetime_functions_execute($type);
   if ($result === FALSE) {
     return FALSE;

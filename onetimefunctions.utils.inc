@@ -71,7 +71,7 @@ function drush_get_onetime_function_ids($module, $type = 'predeploy') {
 function drush_get_pending_onetime_functions($type = 'predeploy') {
   $ret = [];
 
-  $last_executed_funcs = drush_get_last_executed_onetime_functions();
+  $last_executed_funcs = drush_get_last_executed_onetime_functions($type);
   foreach (module_list() as $module) {
     $last_executed_func = $last_executed_funcs[$module];
     $func_ids = drush_get_onetime_function_ids($module, $type);
@@ -148,7 +148,7 @@ function drush_include_onetime_functions_files($type = 'predeploy') {
  */
 function drush_d7_onetime_functions_execute($type = 'predeploy') {
   // Looks like calling update_main_prepare is not necessary here.
-  list($pending, $start) = drush_d7_onetime_functions_status();
+  list($pending, $start) = drush_d7_onetime_functions_status($type);
   if ($pending) {
     drush_print_table($pending);
     if (!drush_confirm(dt("Do you wish to run all pending $type?"))) {
