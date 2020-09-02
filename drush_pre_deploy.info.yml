@@ -1,0 +1,4 @@
+name: drush-pre-deploy
+type: module
+description: drush integration that enables pre-deploy hooks.
+core_version_requirement: ^8 || ^9

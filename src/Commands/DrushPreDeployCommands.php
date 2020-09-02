@@ -1,6 +1,6 @@
 <?php
 
-namespace Drush\Commands\drush_pre_deploy;
+namespace Drupal\drush_pre_deploy\Commands;
 
 use Consolidation\Log\ConsoleLogLevel;
 use Drupal\Core\Update\UpdateRegistry;
@@ -10,6 +10,8 @@ use Drush\Exceptions\UserAbortException;
 use Psr\Log\LogLevel;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 
 /**
  * Pre-deploy drush command class.
@@ -20,15 +22,28 @@ class DrushPreDeployCommands extends DeployHookCommands implements SiteAliasMana
 
   /**
    * {@inheritDoc}
-   *
-   * Override the construct to be able to receive 0 params like a sitewide
-   * drush command expects.
-   * The `init()` function is later called in each command to initialize the
-   * members.
-   * This is a technical limitation due to the fact that sitewide drush command
-   * cannot use a drush.services.yml file.
    */
-  public function __construct() {
+  public function __construct($root, $site_path, ModuleHandlerInterface $moduleHandler, KeyValueFactoryInterface $keyValueFactory) {
+    $this->keyValue = $keyValueFactory->get('pre_deploy_hook');
+    $this->registry = new class(
+      $root,
+      $site_path,
+      array_keys($moduleHandler->getModuleList()),
+      $this->keyValue
+    ) extends UpdateRegistry {
+
+      /**
+       * Sets the update registry type.
+       *
+       * @param string $type
+       *   The registry type.
+       */
+      public function setUpdateType($type) {
+        $this->updateType = $type;
+      }
+
+    };
+    $this->registry->setUpdateType('predeploy');
   }
 
   /**
@@ -54,7 +69,6 @@ class DrushPreDeployCommands extends DeployHookCommands implements SiteAliasMana
    * @phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
    */
   public function status() {
-    $this->init();
     return parent::status();
   }
 
@@ -71,7 +85,6 @@ class DrushPreDeployCommands extends DeployHookCommands implements SiteAliasMana
    *   0 for success, 1 for failure.
    */
   public function preDeploy() {
-    $this->init();
     $pending = $this->registry->getPendingUpdateFunctions();
 
     if (empty($pending)) {
@@ -134,39 +147,6 @@ class DrushPreDeployCommands extends DeployHookCommands implements SiteAliasMana
       $this->logger()->error(dt('%type: @message in %function (line %line of %file).', $variables));
       return FALSE;
     }
-  }
-
-  /**
-   * Constructor like function.
-   *
-   * This init function exists because it seems currently impossible to use a
-   * drush.services.yml for a sitewide drush command.
-   */
-  protected function init() {
-    $root = \Drupal::service('app.root');
-    $site_path = \Drupal::service('site.path');
-    $moduleHandler = \Drupal::service('module_handler');
-    $keyValueFactory = \Drupal::service('keyvalue');
-    $this->keyValue = $keyValueFactory->get('pre_deploy_hook');
-    $this->registry = new class(
-      $root,
-      $site_path,
-      array_keys($moduleHandler->getModuleList()),
-      $this->keyValue
-    ) extends UpdateRegistry {
-
-      /**
-       * Sets the update registry type.
-       *
-       * @param string $type
-       *   The registry type.
-       */
-      public function setUpdateType($type) {
-        $this->updateType = $type;
-      }
-
-    };
-    $this->registry->setUpdateType('predeploy');
   }
 
 }

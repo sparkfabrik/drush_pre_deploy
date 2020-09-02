@@ -1,0 +1,6 @@
+services:
+  drush_pre_deploy.commands:
+    class: \Drupal\drush_pre_deploy\Commands\DrushPreDeployCommands
+    arguments: ['@app.root', '@site.path', '@module_handler', '@keyvalue']
+    tags:
+      - { name: drush.command }

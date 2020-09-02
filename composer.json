@@ -1,5 +1,5 @@
 {
-    "name": "sparkfabrik/drush-pre-deploy",
+    "name": "sparkfabrik/drush_pre_deploy",
     "description": "drush integration that enables \"pre-deploy\" hooks.",
     "type": "drupal-drush",
     "minimum-stability": "dev",
@@ -22,6 +22,13 @@
     "require": {},
     "conflict": {
       "drush/drush": "<10.3.0"
+    },
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^10"
+            }
+        }
     },
     "require-dev": {
         "drupal/coder": "^8"

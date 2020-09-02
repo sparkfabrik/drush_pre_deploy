@@ -32,11 +32,20 @@ Additionally this project provides the `deploy:pre-hook` and `deploy:pre-hook-st
 
 # Installation
 
-`composer require sparkfabrik/drush-pre-deploy`
+`composer require sparkfabrik/drush_pre_deploy`
 
 This project requires drush at least at version 10.3.0.
 
 There are some additional manual install steps while some upstream packages like [Composer-installers](https://github.com/composer/installers)) adapt to Drush 10:
 
-* In your project's main composer.json, change the 'type:drupal-drush' installer-path from `drush/contrib/{$name}` to `drush/Commands/{$name}`.
-* If your repository includes a legacy `drush/contrib` folder, rename it to `drush/Commands`.
+* In your project's main composer.json, add the following:
+
+```
+"extra": {
+  ...
+  "installer-paths": {
+    ...
+    "web/modules/contrib/{$name}": ["sparkfabrik/drush_pre_deploy"],
+```
+
+change the 'type:drupal-drush' installer-path from `drush/contrib/{$name}` to `drush/Commands/{$name}`.
