@@ -1,10 +1,10 @@
 {
     "name": "sparkfabrik/drush_pre_deploy",
     "description": "drush integration that enables \"pre-deploy\" hooks.",
-    "type": "drupal-drush",
+    "type": "drupal-module",
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "keywords": ["drush", "drupal"],
+    "keywords": ["drush", "drupal", "deploy"],
     "homepage": "https://github.com/sparkfabrik/drush-pre-deploy",
     "license": "GPL-2.0-or-later",
     "authors": [
