@@ -38,7 +38,7 @@ This project requires drush at least at version 10.3.0.
 
 There are some additional manual install steps while some upstream packages like [Composer-installers](https://github.com/composer/installers)) adapt to Drush 10:
 
-* In your project's main composer.json make ssure that installer-paths folder is set for "drupal-module" type:
+* In your project's main composer.json make sure installer-paths folder is set for "drupal-module" type:
 
 ```
 "extra": {
@@ -48,7 +48,7 @@ There are some additional manual install steps while some upstream packages like
     "web/modules/contrib/{$name}": ["type:drupal-module"],
 ```
 
-To make sure the hook command is discover, you need to add a custom "drush.yml" configuration in a drush folder like this:
+To make sure the hook command is discovered, you need to add a custom "drush.yml" configuration in a drush folder like this:
 ```
 .
 └── ROOT_PROJECT_PATH/

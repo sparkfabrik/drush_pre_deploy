@@ -5,7 +5,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "keywords": ["drush", "drupal", "deploy"],
-    "homepage": "https://github.com/sparkfabrik/drush-pre-deploy",
+    "homepage": "https://github.com/sparkfabrik/drush_pre_deploy",
     "license": "GPL-2.0-or-later",
     "authors": [
       {
