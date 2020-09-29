@@ -1,6 +1,6 @@
 <?php
 
-namespace Drush\Commands\core;
+namespace Drush;
 
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Drush\Commands\DrushCommands;
